@@ -18,13 +18,13 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
         invalidProperty: "",
       },
     });
-    const result = response.json();
 
-    t.equal(result.statusCode, 400, "Error code should returned");
+    t.equal(response.statusCode, 400, "Error code should returned");
+
+    const result = response.json();
     t.match(
       result,
       {
-        statusCode: 400,
         code: "FST_ERR_VALIDATION",
         error: "Bad Request",
         message: "body must have required property 'url'",
@@ -42,12 +42,13 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
         url,
       },
     });
-    const result = response.json();
 
+    t.equal(response.statusCode, 400, "Error code should returned");
+
+    const result = response.json();
     t.match(
       result,
       {
-        statusCode: 400,
         error: "Bad Request",
         message: `invalid Betano horse racing URL supplied: '${url}'`,
       },
@@ -70,8 +71,10 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
         url: nextHorseRaceUrl,
       },
     });
-    const result = response.json();
 
+    t.equal(response.statusCode, 200, "Ok code should returned");
+
+    const result = response.json();
     t.ok(Array.isArray(result), "Outcomes should be an array");
     t.ok(result.length > 0, "Data array should not be empty");
 

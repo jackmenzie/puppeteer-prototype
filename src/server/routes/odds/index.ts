@@ -31,13 +31,12 @@ export default async function odds(server: FastifyInstance) {
         const horseRaceOutcomes = await betano.getHorseRaceOutcomes(url);
 
         const message = JSON.stringify(horseRaceOutcomes);
-        reply.status(200).send(message);
+        reply.code(200).send(message);
       } catch (error: unknown) {
         const errorMessage =
           error instanceof Error ? error.message : "Unknown error occurred";
 
-        reply.send({
-          statusCode: 400,
+        reply.code(400).send({
           error: "Bad Request",
           message: errorMessage,
         });
