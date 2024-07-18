@@ -11,7 +11,7 @@ export class Betano {
     this.browser = browser;
   }
 
-  // Required for testing as active/complete races aren't able to be scraped
+  // Required for testing as active/complete races use a different URL
   async getNextHorseRaceUrl() {
     const page = await this.browser.newPage();
     await page.goto(this.horseRacingPageUrl, { waitUntil: "networkidle2" });
@@ -26,7 +26,18 @@ export class Betano {
     return nextHorseRaceUrl;
   }
 
+  validateHorseRaceUrl(url: string) {
+    const pattern =
+      /^https:\/\/www\.betano\.co\.uk\/en-gb\/sports\/364\/meetings\/\d+\/events\/\d+$/;
+
+    if (!pattern.test(url)) {
+      throw new Error(`invalid Betano horse racing URL supplied: '${url}'`);
+    }
+  }
+
   async getHorseRaceOutcomes(url: string) {
+    this.validateHorseRaceUrl(url);
+
     const page = await this.browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
 

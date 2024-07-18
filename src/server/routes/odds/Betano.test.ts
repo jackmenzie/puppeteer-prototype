@@ -4,11 +4,11 @@ import { Betano } from "./Betano";
 
 t.test("Betano", { name: "integration" }, async (t) => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ["--no-sandbox"],
   });
 
-  t.afterEach(async () => {
+  t.teardown(async () => {
     await browser.close();
   });
 
