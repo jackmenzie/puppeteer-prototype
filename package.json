@@ -1,0 +1,27 @@
+{
+	"name": "poc-puppeteer",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "tsx watch src/server/index.ts",
+		"build": "tsc",
+		"test": "tap",		
+		"test:unit": "tap -g=unit",
+		"test:integration": "tap -g=integration",
+		"start": "node dist/src/server/index.js"
+	},
+	"dependencies": {
+		"fastify": "^4.28.1",
+		"puppeteer": "^22.13.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.11",
+		"tap": "^21.0.0",
+		"tsx": "^4.16.2",
+		"typescript": "^5.5.3"
+	},
+	"keywords": [],
+	"author": "Jack Menzie",
+	"license": "ISC"
+}
