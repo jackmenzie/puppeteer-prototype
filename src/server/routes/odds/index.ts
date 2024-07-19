@@ -19,6 +19,24 @@ export default async function odds(server: FastifyInstance) {
         },
       },
     },
+    onRequest: async (
+      request: FastifyRequest<{ Body: IOddsParams }>,
+      reply,
+      done
+    ) => {
+      try {
+        await server.authenticate(request, reply);
+        done();
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          done(error);
+        } else {
+          done(new Error("An unknown error occurred"));
+        }
+      }
+    },
+    config: { allowedRoles: ["admin"] },
+    preHandler: server.auth([server.authorize]),
     handler: async (request: FastifyRequest<{ Body: IOddsParams }>, reply) => {
       const browser = await puppeteer.launch({
         headless: true,

@@ -3,11 +3,43 @@ import { buildServer } from "../../server";
 import { Betano } from "./Betano";
 import puppeteer from "puppeteer";
 
-t.test("Odds Endpoint", { name: "integration" }, async (t) => {
+t.test("Odds Endpoint - integration", async (t) => {
   const server = await buildServer();
+
+  const authResponse = await server.inject({
+    url: "/jwt",
+    method: "GET",
+  });
+  const { token } = authResponse.json();
 
   t.teardown(async () => {
     await server.close();
+  });
+
+  t.test("POST with an invalid token", async (t) => {
+    const response = await server.inject({
+      url: "/odds",
+      method: "POST",
+      body: {
+        invalidProperty: "",
+      },
+      headers: {
+        authorization: `Bearer INVALID`,
+      },
+    });
+
+    t.equal(response.statusCode, 401, "Error code should returned");
+
+    const result = response.json();
+    t.match(
+      result,
+      {
+        statusCode: 401,
+        error: "Unauthorized",
+        message: "Unauthorized",
+      },
+      "Error should be returned"
+    );
   });
 
   t.test("POST an invalid object", async (t) => {
@@ -16,6 +48,9 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
       method: "POST",
       body: {
         invalidProperty: "",
+      },
+      headers: {
+        authorization: `Bearer ${token}`,
       },
     });
 
@@ -40,6 +75,9 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
       method: "POST",
       body: {
         url,
+      },
+      headers: {
+        authorization: `Bearer ${token}`,
       },
     });
 
@@ -69,6 +107,9 @@ t.test("Odds Endpoint", { name: "integration" }, async (t) => {
       method: "POST",
       body: {
         url: nextHorseRaceUrl,
+      },
+      headers: {
+        authorization: `Bearer ${token}`,
       },
     });
 

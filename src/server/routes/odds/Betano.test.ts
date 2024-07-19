@@ -2,7 +2,7 @@ import puppeteer from "puppeteer";
 import t from "tap";
 import { Betano } from "./Betano";
 
-t.test("Betano", { name: "integration" }, async (t) => {
+t.test("Betano - integration", async (t) => {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox"],
